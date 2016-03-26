@@ -22,8 +22,7 @@ public interface GenericDao<T, PK extends Serializable> {
     // Retrieves an object associated with a specific ID.
     T queryForId(PK id);
 
-    /*// Retrieves an object associated with a specific ID.
-    T queryForSpecifyId(String id);*/
+
 
     // Query for all of the items in the object table.
     List<T> queryForAll();
@@ -34,6 +33,7 @@ public interface GenericDao<T, PK extends Serializable> {
     // Query for the items in the object table that match a simple where with a
     // single field = value type of WHERE clause.
     List<T> queryForEq(String property, Object value);
+
 
     // Query for the rows in the database that matches all of the field to value
     // entries from the map passed in.
@@ -51,6 +51,15 @@ public interface GenericDao<T, PK extends Serializable> {
 
     // Delete an object from the database that has an id.
     int deleteById(PK id);
+
+    //Delete all
+    int deleteAll();
+
+    //Delete by FieldValus
+    int deleteByFieldValues(Map<String, Object> properties);
+
+    //Update by FieldValue
+    int updateByFieldValues(Map<String, Object> propertiesOld,Map<String, Object> propertiesNew);
 
     // Add a BETWEEN clause so the column must be between the low and high
     // parameters.

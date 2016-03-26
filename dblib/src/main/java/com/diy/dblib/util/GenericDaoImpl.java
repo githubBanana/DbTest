@@ -1,12 +1,17 @@
 package com.diy.dblib.util;
 
 import android.content.Context;
+import android.nfc.Tag;
+import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -118,7 +123,7 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
     }
 
     /**
-     * 根据properties 获取对应的List对象
+     * 根据properties(多条件限制查询) 获取对应的List对象
      * @param properties
      * @return
      */
@@ -133,7 +138,7 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
     }
 
     /**
-     * 根据properties 获取对应的第一个对象
+     * 根据properties(多条件限制查询：与操作) 获取对应的第一个对象
      * @param properties
      * @return
      */
@@ -148,7 +153,6 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
                 }
                 isAnd = false;
                 where = where.eq(key, properties.get(key));
-
             }
             return where.queryForFirst();
         } catch (SQLException e) {
@@ -189,6 +193,11 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         return 0;
     }
 
+    /**
+     * 根据ID删除对象
+     * @param id
+     * @return
+     */
     @Override
     public int deleteById(PK id) {
         try {
@@ -197,9 +206,77 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
             e.printStackTrace();
         }
         return 0;
-
     }
 
+    /**
+     * 删除对应所有记录
+     * @return
+     */
+    @Override
+    public int deleteAll(){
+        DeleteBuilder<T, PK> deleteBuilder= daoOpe.deleteBuilder();
+        try {
+             return deleteBuilder.delete();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 根据properties(多条件限制:与删除)删除对应的记录
+     * @param properties
+     * @return
+     */
+    @Override
+    public int deleteByFieldValues(Map<String, Object> properties) {
+        DeleteBuilder<T, PK> deleteBuilder= daoOpe.deleteBuilder();
+        Where<T, PK> where = deleteBuilder.where();
+        try {
+            boolean isAnd = true;
+            for (String key : properties.keySet()) {
+                if (!isAnd) {
+                    where = where.and();
+                }
+                isAnd = false;
+                where = where.eq(key, properties.get(key));
+            }
+            return deleteBuilder.delete();
+        }catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return 0;
+    }
+
+    /**
+     * 根据propertiesOld筛选后 由propertiesNew更新相应的记录
+     * @param propertiesOld
+     * @param propertiesNew
+     * @return
+     */
+    @Override
+    public int updateByFieldValues(Map<String, Object> propertiesOld,Map<String, Object> propertiesNew) {
+        UpdateBuilder<T, PK> updateBuilder= daoOpe.updateBuilder();
+        Where<T, PK> whereOld = updateBuilder.where();
+        try {
+            boolean isAndOld = true;
+            for (String key : propertiesOld.keySet()) {
+                if (!isAndOld) {
+                    whereOld = whereOld.and();
+                }
+                isAndOld = false;
+                whereOld = whereOld.eq(key, propertiesOld.get(key));
+            }
+            for (String key : propertiesNew.keySet()) {
+                updateBuilder.updateColumnValue(key, propertiesNew.get(key));
+            }
+            return updateBuilder.update();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     @Override
     public List<T> between(String columnName, Object low, Object high) {
         try {
