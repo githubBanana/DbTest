@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @version V1.0 <数据库基Helper>
- * @author: siushen
+ * @author: Xs
  * @date: 2016-03-23 21:35
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {

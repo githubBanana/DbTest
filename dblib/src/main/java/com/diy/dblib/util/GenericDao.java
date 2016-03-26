@@ -9,19 +9,21 @@ import java.util.Map;
 
 /**
  * @version V1.0 <通用数据库操作方法>
- * @author: siushen
+ * @author: Xs
  * @date: 2016-03-23 21:40
  */
 public interface GenericDao<T, PK extends Serializable> {
 
-    // This is a convenience method for creating an item in the database if it
-    // does not exist.
+    // This is a convenience method for creating an item in the database if it does not exist.
     Dao.CreateOrUpdateStatus createOrUpdate(T t);
 
     void createOrUpdate(List<T> t) throws SQLException;
 
     // Retrieves an object associated with a specific ID.
     T queryForId(PK id);
+
+    /*// Retrieves an object associated with a specific ID.
+    T queryForSpecifyId(String id);*/
 
     // Query for all of the items in the object table.
     List<T> queryForAll();

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @version V1.0 <数据库操作方法调用接口>
- * @author: siushen
+ * @version V1.0 <数据库操作方法具体调用接口>
+ * @author: Xs
  * @date: 2016-03-23 21:54
  */
 public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T, PK> {
@@ -27,6 +27,11 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         }
     }
 
+    /**
+     * 添加对象
+     * @param t
+     * @return
+     */
     public Dao.CreateOrUpdateStatus createOrUpdate(T t) {
 		/*
 		 * //事务操作
@@ -44,6 +49,11 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
     }
 
+    /**
+     * 添加一个列表的对象
+     * @param t
+     * @throws SQLException
+     */
     @Override
     public void createOrUpdate(List<T> t) throws SQLException {
         for (int i = 0; i < t.size(); i++) {
@@ -51,6 +61,11 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         }
     }
 
+    /**
+     * 根据ID获取对象
+     * @param id
+     * @return
+     */
     public T queryForId(PK id) {
         try {
             return daoOpe.queryForId(id);
@@ -60,6 +75,11 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         return null;
     }
 
+
+    /**
+     * 获取所有对象
+     * @return
+     */
     @Override
     public List<T> queryForAll() {
         List<T> tList = null;
@@ -81,6 +101,12 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         return null;
     }
 
+    /**
+     * 根据field字段 获取List对象
+     * @param property
+     * @param value
+     * @return
+     */
     @Override
     public List<T> queryForEq(String property, Object value) {
         try {
@@ -91,6 +117,11 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         return null;
     }
 
+    /**
+     * 根据properties 获取对应的List对象
+     * @param properties
+     * @return
+     */
     @Override
     public List<T> queryForFieldValues(Map<String, Object> properties) {
         try {
@@ -101,6 +132,11 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
         return null;
     }
 
+    /**
+     * 根据properties 获取对应的第一个对象
+     * @param properties
+     * @return
+     */
     @Override
     public T queryForFieldValuesAndFirst(Map<String, Object> properties) {
         try {

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.diy.dblib.test.SampleDatabaseCache;
+
 /**
  * 测试类
  */
@@ -25,10 +27,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+          /*      Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                testDB();
             }
         });
+    }
+
+    private void  testDB() {
+        SampleDatabaseCache.getCache(MainActivity.this).CreateUserData();
     }
 
     @Override
